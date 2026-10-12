@@ -63,6 +63,9 @@ function GIFEncoder(width, height) {
   // transparent index in color table
   this.transIndex = 0;
 
+  // value for alpha cutoff
+  this.alphaThreshold = 0;
+
   // -1 = no repeat, 0 = forever. anything else is repeat count
   this.repeat = -1;
 
@@ -135,6 +138,15 @@ GIFEncoder.prototype.setRepeat = function(repeat) {
 */
 GIFEncoder.prototype.setTransparent = function(color) {
   this.transparent = color;
+};
+
+/*
+  Sets the alpha threshold for the last added frame and any subsequent
+  frames. Any pixel with an alpha value lower than this will be replaced with
+  complete transparency.
+*/
+GIFEncoder.prototype.setAlphaThreshold = function(value) {
+  this.alphaThreshold = value;
 };
 
 /*
@@ -418,10 +430,19 @@ GIFEncoder.prototype.getImagePixels = function() {
 
   for (var i = 0; i < h; i++) {
     for (var j = 0; j < w; j++) {
-      this.pixels[count++] = data[srcPos++];
-      this.pixels[count++] = data[srcPos++];
-      this.pixels[count++] = data[srcPos++];
-      srcPos++;
+      var r = data[srcPos++];
+      var g = data[srcPos++];
+      var b = data[srcPos++];
+      var a = data[srcPos++];
+      if (a < this.alphaThreshold) {
+        a = 0;
+        r = 0;
+        g = 0;
+        b = 0;
+      }
+      this.pixels[count++] = r;
+      this.pixels[count++] = g;
+      this.pixels[count++] = b;
     }
   }
 };

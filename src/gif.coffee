@@ -14,6 +14,7 @@ class GIF extends EventEmitter
     transparent: null
     debug: false
     dither: false # see GIFEncoder.js for dithering options
+    alphaThreshold: 0,
 
   frameDefaults =
     delay: 500 # ms
@@ -189,6 +190,7 @@ class GIF extends EventEmitter
       quality: @options.quality
       dither: @options.dither
       globalPalette: @options.globalPalette
+      alphaThreshold: @options.alphaThreshold
       repeat: @options.repeat
       canTransfer: (browser.name is 'chrome')
 

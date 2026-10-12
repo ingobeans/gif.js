@@ -8,6 +8,7 @@ renderFrame = (frame) ->
   else
     encoder.firstFrame = false
 
+  encoder.setAlphaThreshold frame.alphaThreshold
   encoder.setTransparent frame.transparent
   encoder.setDispose frame.dispose
   encoder.setRepeat frame.repeat
